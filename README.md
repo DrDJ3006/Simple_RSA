@@ -38,9 +38,9 @@ No dependencies are required.
    python main.py
    ```
 
-### **Running the Compiled Executable (`main.exe`)**
-1. Download `main.exe` (or compile it using `auto-py-to-exe`).
-2. Double-click `main.exe` to start the application.
+### **Running the Compiled Executable (`simple-rsa.exe`)**
+1. Download `simple-rsa.exe` (or compile it using `auto-py-to-exe`).
+2. Double-click `simple-rsa.exe` to start the application.
 
 ## Usage
 
