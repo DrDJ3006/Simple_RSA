@@ -5,12 +5,12 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives import hashes
 
-# Constantes pour les chemins de fichier et la configuration de la fenêtre
+# Constants for file paths and window configuration
 KEY_SIZE = 2048
 PUBLIC_EXPONENT = 65537
 
 def get_desktop_path():
-    """Retourne le chemin du bureau pour l'utilisateur actuel."""
+    """Returns the desktop path for the current user."""
     if os.name == 'nt':  # Windows
         return os.path.join(os.environ['USERPROFILE'], 'Desktop')
     else:  # MacOS, Linux
@@ -24,7 +24,7 @@ def setup_application():
     return app_folder
 
 def generate_keys(app_folder):
-    """Génère et sauvegarde les clés RSA privée et publique dans le dossier spécifié."""
+    """Generates and saves RSA private and public keys in the specified folder."""
     private_key = rsa.generate_private_key(public_exponent=PUBLIC_EXPONENT, key_size=KEY_SIZE)
     public_key = private_key.public_key()
 
@@ -49,7 +49,7 @@ def generate_keys(app_folder):
     return private_key_path, public_key_path
 
 def load_private_key(private_key_path):
-    """Charge la clé privée depuis un fichier."""
+    """Loads the private key from a file."""
     with open(private_key_path, 'rb') as key_file:
         return serialization.load_pem_private_key(
             key_file.read(),
@@ -58,7 +58,7 @@ def load_private_key(private_key_path):
         )
 
 def load_public_key(public_key_path):
-    """Charge la clé publique depuis un fichier."""
+    """Loads the public key from a file."""
     with open(public_key_path, 'rb') as key_file:
         return serialization.load_pem_public_key(
             key_file.read(),
@@ -66,9 +66,9 @@ def load_public_key(public_key_path):
         )
 
 def show_public_key():
-    """Affiche la clé publique dans une nouvelle fenêtre."""
+    """Displays the public key in a new window."""
     top = Toplevel(root)
-    top.title("Clé Publique RSA")
+    top.title("RSA Public Key")
     center_window(top, 550, 300)
 
     text = tk.Text(top, wrap='word')
@@ -81,12 +81,12 @@ def show_public_key():
     text.configure(state='disabled')
 
 def encrypt_message():
-    """Chiffre un message en utilisant la clé publique chargée."""
+    """Encrypts a message using the loaded public key."""
     encryption_window = Toplevel(root)
-    encryption_window.title("Chiffrer un message")
+    encryption_window.title("Encrypt a Message")
     center_window(encryption_window, 400, 300)
 
-    tk.Label(encryption_window, text="Entrez le message à chiffrer:").pack(pady=(10, 0))
+    tk.Label(encryption_window, text="Enter the message to encrypt:").pack(pady=(10, 0))
     message_text = tk.Text(encryption_window, height=5, width=50)
     message_text.pack(pady=10)
 
@@ -100,17 +100,17 @@ def encrypt_message():
                 label=None
             )
         )
-        messagebox.showinfo("Message chiffré", encrypted.hex())
+        messagebox.showinfo("Encrypted Message", encrypted.hex())
 
-    tk.Button(encryption_window, text="Chiffrer", command=perform_encryption).pack(pady=10)
+    tk.Button(encryption_window, text="Encrypt", command=perform_encryption).pack(pady=10)
 
 def decrypt_message():
-    """Déchiffre un message en utilisant la clé privée chargée."""
+    """Decrypts a message using the loaded private key."""
     decryption_window = Toplevel(root)
-    decryption_window.title("Déchiffrer un message")
+    decryption_window.title("Decrypt a Message")
     center_window(decryption_window, 400, 300)
 
-    tk.Label(decryption_window, text="Entrez le message chiffré (en hexadécimal):").pack(pady=(10, 0))
+    tk.Label(decryption_window, text="Enter the encrypted message (in hexadecimal):").pack(pady=(10, 0))
     encrypted_text = tk.Text(decryption_window, height=5, width=50)
     encrypted_text.pack(pady=10)
 
@@ -126,14 +126,14 @@ def decrypt_message():
                     label=None
                 )
             )
-            messagebox.showinfo("Message déchiffré", decrypted_message.decode('utf-8'))
+            messagebox.showinfo("Decrypted Message", decrypted_message.decode('utf-8'))
         except Exception as e:
-            messagebox.showerror("Erreur de déchiffrement", str(e))
+            messagebox.showerror("Decryption Error", str(e))
 
-    tk.Button(decryption_window, text="Déchiffrer", command=perform_decryption).pack(pady=10)
+    tk.Button(decryption_window, text="Decrypt", command=perform_decryption).pack(pady=10)
 
 def center_window(win, width, height):
-    """Centre la fenêtre sur l'écran."""
+    """Centers the window on the screen."""
     screen_width = win.winfo_screenwidth()
     screen_height = win.winfo_screenheight()
     x = (screen_width // 2) - (width // 2)
@@ -146,14 +146,14 @@ private_key = load_private_key(private_key_path)
 public_key = load_public_key(public_key_path)
 
 root = tk.Tk()
-root.title("Outils de Cryptographie")
+root.title("Simple RSA")
 center_window(root, 300, 150)
 
-export_button = tk.Button(root, text="Exporter clé", command=show_public_key)
+export_button = tk.Button(root, text="Export Key", command=show_public_key)
 export_button.pack(pady=5)
-encrypt_button = tk.Button(root, text="Chiffrer", command=encrypt_message)
+encrypt_button = tk.Button(root, text="Encrypt", command=encrypt_message)
 encrypt_button.pack(pady=5)
-decrypt_button = tk.Button(root, text="Déchiffrer", command=decrypt_message)
+decrypt_button = tk.Button(root, text="Decrypt", command=decrypt_message)
 decrypt_button.pack(pady=5)
 
 root.mainloop()
